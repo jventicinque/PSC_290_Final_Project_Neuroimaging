@@ -1,1 +1,7 @@
+#Thresholding Walkthrough
+from nilearn import plotting
+import pylab as plt
+%matplotlib inline
 
+import numpy as np
+import nilabel as nb
