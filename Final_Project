@@ -1,8 +1,16 @@
 #Thresholding Walkthrough
 
+#Load in Packages
 from nilearn import plotting
 import pylab as plt
 %matplotlib inline
 
 import numpy as np
 import nilabel as nb
+
+
+#Bonferonni Correction
+#Is this test too conservative for neuroimaging data?
+
+#Family Wise Error Rate
+#Is each test independent? Likely not as there is some degree of spatial correlation
