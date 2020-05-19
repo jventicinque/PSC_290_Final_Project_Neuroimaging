@@ -1,4 +1,5 @@
 #Thresholding Walkthrough
+
 from nilearn import plotting
 import pylab as plt
 %matplotlib inline
