@@ -9,8 +9,12 @@ import numpy as np
 import nilabel as nb
 
 
+#Load in data
+
+
 #Bonferonni Correction
 #Is this test too conservative for neuroimaging data?
+
 
 #Family Wise Error Rate
 #Is each test independent? Likely not as there is some degree of spatial correlation
