@@ -1,0 +1,13 @@
+# K-fold cross-validation for model comparison
+
+from dipy.io.image import load_nifti, save_nifti
+from dipy.io.gradients import read_bvals_bvecs
+from dipy.core.gradients import gradient_table
+import dipy.reconst.dti as dti
+
+file = 'dti_006_dwi_HF_1shell_b1200_eddy_strip_y.nii.gz'
+bvec_fname = 'dti_bvec_su_costin.txt'
+bval_fname = 'dti_bval_su_costin.txt'
+
+# load data from .nii.gz file
+data, affine = load_nifti(file)
