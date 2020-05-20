@@ -6,7 +6,7 @@ from dipy.core.gradients import gradient_table
 import dipy.reconst.dti as dti
 
 # data files
-file = 'dti_006_dwi_HF_1shell_b1200_eddy_strip.nii.gz'
+file = 'dti_006_dwi_HF_1shell_b1200_eddy.nii.gz'
 bvec_fname = 'dti_bvec_su_costin.txt'
 bval_fname = 'dti_bval_su_costin.txt'
 
