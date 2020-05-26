@@ -11,8 +11,8 @@ from nilearn import image
 import nibabel as nib
 
 #Load in data
-img = nib.load('zstat4.nii.gz')
-print(img)
+data = nib.load('zstat4.nii.gz')
+print(data)
 
 #Bonferonni Correction
 #Is this test too conservative for neuroimaging data?
