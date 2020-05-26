@@ -8,10 +8,11 @@ import pylab as plt
 import numpy as np
 import nilabel as nb
 from nilearn import image
-
+import nibabel as nib
 
 #Load in data
-
+img = nib.load('zstat4.nii.gz')
+print(img)
 
 #Bonferonni Correction
 #Is this test too conservative for neuroimaging data?
