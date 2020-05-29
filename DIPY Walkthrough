@@ -3,12 +3,55 @@
 from dipy.io.image import load_nifti, save_nifti
 from dipy.io.gradients import read_bvals_bvecs
 from dipy.core.gradients import gradient_table
+from dipy.data import get_fnames, default_sphere
+from dipy.reconst.csdeconv import auto_response
 import dipy.reconst.dti as dti
+import numpy as np
+import matplotlib as plt
 
-# data files
-file = 'dti_006_dwi_HF_1shell_b1200_eddy.nii.gz'
+# Data files
+file = 'dti_005_dwi_HF_1shell_b1200_eddy.nii.gz'
 bvec_fname = 'dti_bvec_su_costin.txt'
 bval_fname = 'dti_bval_su_costin.txt'
 
-# load data from .nii.gz file
+# Load data from .nii.gz file
 data, affine = load_nifti(file)
+
+# Create gradient table
+gtab = gradient_table(bval_fname, bvec_fname)
+
+# Load bvals, bvecs from .txt files
+bvals, bvecs = read_bvals_bvecs(bval_fname, bvec_fname)
+
+## Worked on this section of code in collaboration with Sarah Hudson
+from dipy.reconst.csdeconv import auto_response
+#
+response, ratio = auto_response(gtab, data, roi_radius=10, fa_thr=0.7)
+
+print(response)
+
+print(ratio)
+
+from dipy.viz import window, actor
+from dipy.sims.voxel import single_tensor_odf
+
+# Enables/disables interactive visualization
+interactive = False
+
+# Ren = helps render the image and show the image
+# Create eigenvalues and eigenvectors for image
+ren = window.Renderer()
+evals = response[0]
+evecs = np.array([[0, 1, 0], [0, 0, 1], [1, 0, 0]]).T
+
+# Simulate ODF with a single tensor
+response_odf = single_tensor_odf(default_sphere.vertices, evals, evecs)
+# transform our data from 1D to 4D
+response_odf = response_odf[None, None, None, :]
+response_actor = actor.odf_slicer(response_odf, sphere=default_sphere,
+                                  colormap='plasma')
+ren.add(response_actor)
+print('Saving illustration as csd_response.png')
+window.record(ren, out_path='csd_response.png', size=(200, 200))
+if interactive:
+    window.show(ren) # Doesn't print image in notebook--come back to later
