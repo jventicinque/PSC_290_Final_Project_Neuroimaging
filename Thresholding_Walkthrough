@@ -17,6 +17,14 @@ print(data)
 #Bonferonni Correction
 #Is this test too conservative for neuroimaging data?
 
+#bonferonni = alpha/ number of voxels 
+
+##example from online- grid width needs to be number of voxels.
+grid_width = 100
+threshold = 0.05/(grid_width**2)
+simulation = SimulateGrid(grid_width=grid_width, n_subjects=20)
+simulation.plot_grid_simulation(threshold=threshold, threshold_type='p', n_simulations=100)
+
 
 #Family Wise Error Rate
 #Is each test independent? Likely not, as there is some degree of spatial correlation
