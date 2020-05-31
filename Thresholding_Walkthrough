@@ -14,8 +14,13 @@ import nibabel as nib
 data = nib.load('zstat4.nii.gz')
 print(data)
 
+#Let's visualize the data first and then we will run some different thresholding techniques on it
+
 #Bonferonni Correction
 #Is this test too conservative for neuroimaging data?
+
+#Determine number of voxels in data (this will be count as the "number of tests" that are being run).
+
 
 #bonferonni = alpha/ number of voxels 
 
