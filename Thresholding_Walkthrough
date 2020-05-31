@@ -11,16 +11,20 @@ from nilearn import image
 import nibabel as nib
 
 #Load in data
-data = nib.load('zstat4.nii.gz')
-print(data)
+unthresh_data = nib.load('zstat4.nii.gz')
+print(unthresh_data)
 
 #Let's visualize the data first and then we will run some different thresholding techniques on it
+from nilearn.image.image import mean_img
+
+#plot data
+plotting.view_img(unthresh_data, threshold=500)
+
+#First, we need to determine the number of voxels in data (this will be count as the "number of tests" that are being run).
+
 
 #Bonferonni Correction
 #Is this test too conservative for neuroimaging data?
-
-#Determine number of voxels in data (this will be count as the "number of tests" that are being run).
-
 
 #bonferonni = alpha/ number of voxels 
 
@@ -33,3 +37,6 @@ simulation.plot_grid_simulation(threshold=threshold, threshold_type='p', n_simul
 
 #Family Wise Error Rate
 #Is each test independent? Likely not, as there is some degree of spatial correlation
+
+#False Discovery Rate
+#The FDR is the expected proportion of false positives among significant tests.
