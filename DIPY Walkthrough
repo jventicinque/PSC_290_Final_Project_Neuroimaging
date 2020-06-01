@@ -23,7 +23,6 @@ gtab = gradient_table(bval_fname, bvec_fname)
 # Load bvals, bvecs from .txt files
 bvals, bvecs = read_bvals_bvecs(bval_fname, bvec_fname)
 
-## Worked on this section of code in collaboration with Sarah Hudson
 from dipy.reconst.csdeconv import auto_response
 #
 response, ratio = auto_response(gtab, data, roi_radius=10, fa_thr=0.7)
