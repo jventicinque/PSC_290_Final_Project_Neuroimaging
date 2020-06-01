@@ -19,19 +19,25 @@ print(unthresh_data)
 
 
 #First, we need to make a mask of the whole brain and determine the number of voxels in data (this will be count as the "number of tests" that are being run).
-
 #Make a mask of only voxels in the brain
+
 from nilearn.masking import compute_epi_mask
 mask_img = compute_epi_mask(unthresh_data)
 
 #Determine the shape of the mask to see how many "independent tests" are being run
-mask_img.shape
+n =mask_img.shape
+print(n)
 
 #Bonferonni Correction
 #Is this test too conservative for neuroimaging data?
-
 #bonferonni = alpha/ number of voxels 
 
+def bonferroni_thresh(alpha = .05, n):
+  return alpha / n
+
+print(bonferroni_thresh(.05, n))
+
+#plot to demonstrate bonferonni 
 ##example from online- grid width needs to be number of voxels.
 grid_width = 100
 threshold = 0.05/(grid_width**2)
