@@ -15,13 +15,17 @@ unthresh_data = nib.load('zstat4.nii.gz')
 print(unthresh_data)
 
 #Let's visualize the data first and then we will run some different thresholding techniques on it
-from nilearn.image.image import mean_img
-
 #plot data
-plotting.view_img(unthresh_data, threshold=500)
 
-#First, we need to determine the number of voxels in data (this will be count as the "number of tests" that are being run).
 
+#First, we need to make a mask of the whole brain and determine the number of voxels in data (this will be count as the "number of tests" that are being run).
+
+#Make a mask of only voxels in the brain
+from nilearn.masking import compute_epi_mask
+mask_img = compute_epi_mask(unthresh_data)
+
+#Determine the shape of the mask to see how many "independent tests" are being run
+mask_img.shape
 
 #Bonferonni Correction
 #Is this test too conservative for neuroimaging data?
