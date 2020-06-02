@@ -48,6 +48,10 @@ simulation.plot_grid_simulation(threshold=threshold, threshold_type='p', n_simul
 #Family Wise Error Rate
 #Is each test independent? Likely not, as there is some degree of spatial correlation
 
+#Calculate FWER
+
+#plot FWER
+
 #False Discovery Rate
 #The FDR is the expected proportion of false positives among significant tests.
 
@@ -55,3 +59,5 @@ import scipy.stats as sst
 normal_distribution = sst.norm(loc=0,scale=1.) #loc is the mean, scale is the variance.
 # The normal CDF
 p_values = normal_distribution.cdf(z_values)
+
+#plot FDR
