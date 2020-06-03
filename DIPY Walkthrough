@@ -70,11 +70,11 @@ from dipy.reconst.csdeconv import recursive_response
 import dipy.reconst.dti as dti
 # Diffusion Tensor
 tenmodel = dti.TensorModel(gtab)
-# The fit method creates a TensorFit object which contains the fitting parameters and other attributes of the model.
+# The fit method creates a TensorFit object which contains the fitting parameters and other attributes of the model
 tenfit = tenmodel.fit(data, mask=data[..., 0] > 200)
 
-# Fractional anisotropy (FA) of a diffusion tensor.
-# FA is used to characterize the degree to which the distribution of diffusion in a voxel is directional. 
+# Fractional anisotropy (FA) of a diffusion tensor
+# FA is used to characterize the degree to which the distribution of diffusion in a voxel is directional 
 # Whether there is relatively unrestricted diffusion in one particular direction
 from dipy.reconst.dti import fractional_anisotropy
 FA = fractional_anisotropy(tenfit.evals)
