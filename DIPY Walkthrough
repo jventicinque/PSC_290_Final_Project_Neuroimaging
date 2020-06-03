@@ -7,9 +7,8 @@ from dipy.data import get_fnames, default_sphere
 from dipy.reconst.csdeconv import auto_response
 import dipy.reconst.dti as dti
 import numpy as np
-import matplotlib as plt
 
-# Data files
+# Load in data files
 file = 'dti_005_dwi_HF_1shell_b1200_eddy.nii.gz'
 bvec_fname = 'dti_bvec_su_costin.txt'
 bval_fname = 'dti_bval_su_costin.txt'
@@ -23,14 +22,17 @@ gtab = gradient_table(bval_fname, bvec_fname)
 # Load bvals, bvecs from .txt files
 bvals, bvecs = read_bvals_bvecs(bval_fname, bvec_fname)
 
+# Automatic estimation of response function using Fractional Anisotropy (FA)
+# FA is defined as the normalized variance of the eigen-values of the tensor
 from dipy.reconst.csdeconv import auto_response
-#
 response, ratio = auto_response(gtab, data, roi_radius=10, fa_thr=0.7)
 
 print(response)
 
 print(ratio)
 
+# window contains all the objects that connect what needs to be rendered to the display 
+# actor module contains all the different primitives e.g., streamtubes, lines, image slices, etc.
 from dipy.viz import window, actor
 from dipy.sims.voxel import single_tensor_odf
 
@@ -38,19 +40,53 @@ from dipy.sims.voxel import single_tensor_odf
 interactive = False
 
 # Ren = helps render the image and show the image
+# The Renderer class holds and provides access to all the actors
 # Create eigenvalues and eigenvectors for image
 ren = window.Renderer()
 evals = response[0]
 evecs = np.array([[0, 1, 0], [0, 0, 1], [1, 0, 0]]).T
 
 # Simulate ODF with a single tensor
+# ODF = Orientation Distribution Functions
 response_odf = single_tensor_odf(default_sphere.vertices, evals, evecs)
 # transform our data from 1D to 4D
 response_odf = response_odf[None, None, None, :]
+# Slice 4D spherical fields in native or world coordinates
 response_actor = actor.odf_slicer(response_odf, sphere=default_sphere,
                                   colormap='plasma')
+#
 ren.add(response_actor)
 print('Saving illustration as csd_response.png')
 window.record(ren, out_path='csd_response.png', size=(200, 200))
 if interactive:
-    window.show(ren) # Doesn't print image in notebook--come back to later
+    window.show(ren) # The show function displays what is in the renderer on a window 
+
+#
+ren.rm(response_actor)
+
+# Recursive calibration of response function using peak threshold
+from dipy.reconst.csdeconv import recursive_response
+
+import dipy.reconst.dti as dti
+# Diffusion Tensor
+tenmodel = dti.TensorModel(gtab)
+# The fit method creates a TensorFit object which contains the fitting parameters and other attributes of the model.
+tenfit = tenmodel.fit(data, mask=data[..., 0] > 200)
+
+# Fractional anisotropy (FA) of a diffusion tensor.
+# FA is used to characterize the degree to which the distribution of diffusion in a voxel is directional. 
+# Whether there is relatively unrestricted diffusion in one particular direction
+from dipy.reconst.dti import fractional_anisotropy
+FA = fractional_anisotropy(tenfit.evals)
+# MD = mean of the  eigenvalues of the tensor
+# Calling the mean_diffusivity module function on the eigen-values of the TensorFit class
+MD = dti.mean_diffusivity(tenfit.evals)
+
+#
+wm_mask = (np.logical_or(FA >= 0.4, (np.logical_and(FA >= 0.15, MD >= 0.0011))))
+
+#
+response = recursive_response(gtab, data, mask=wm_mask, sh_order=8,
+                              peak_thr=0.01, init_fa=0.08,
+                              init_trace=0.0021, iter=8, convergence=0.001,
+                              parallel=True)
