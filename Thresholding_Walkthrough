@@ -49,8 +49,7 @@ thresh_masked = masker.fit_transform(unthresh_data)
 
 thresh_masked.shape
 
-####### this needs to be fixed, it will print (1 x 515)
-n = thresh_masked.shape
+n = thresh_masked.shape[1]
 print(n)
 
 #Bonferonni Correction
