@@ -17,15 +17,40 @@ print(unthresh_data)
 #Let's visualize the data first and then we will run some different thresholding techniques on it
 #plot data
 
+plotting.plot_roi(unthresh_data,
+                 cmap='Paired', title='Unthreshholded Data', draw_cross=False)
+
 
 #First, we need to make a mask of the whole brain and determine the number of voxels in data (this will be count as the "number of tests" that are being run).
+
 #Make a mask of only voxels in the brain
 
 from nilearn.masking import compute_epi_mask
 mask_img = compute_epi_mask(unthresh_data)
 
+#load in a mask of the mPFC
+mask_file = 'mPFC_Bilateral_-8_54_24.nii'
+
+# visualize mask on thresholded data and MNI template
+
+plotting.plot_roi(mask_file, bg_img= unthresh_data,
+                 cmap='Paired', title='ROI of mPFC', draw_cross=False)
+
+plotting.plot_roi(mask_file, bg_img= unthresh_data,
+                 cmap='Paired', title='ROI of mPFC', draw_cross=False)
+
+# create the mask to use and standardize
+masker = NiftiMasker(mask_img=mask_file, standardize=True)
+
+# fit the mask
+thresh_masked = masker.fit_transform(unthresh_data)
+
 #Determine the shape of the mask to see how many "independent tests" are being run
-n =mask_img.shape
+
+thresh_masked.shape
+
+####### this needs to be fixed, it will print (1 x 515)
+n = thresh_masked.shape
 print(n)
 
 #Bonferonni Correction
