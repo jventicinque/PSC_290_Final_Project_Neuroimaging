@@ -96,7 +96,7 @@ plt.axhline(y =.07, color= 'r')
 ##It looks like the maximum value is around 37 tests that fall below the .05 threshold
 
 ##Random Field Theory
-##Let's stretch a little further and try a more complicated thresholding technique. It seems kind of complicated, but it seems to be based on the spatial autocorrelation of the data.
+##Let's try to stretch a little further and try a more complicated thresholding technique. It seems kind of complicated, but it seems to be based on the spatial autocorrelation of the data.
 ##First we estimate or manipulate the smoothness of the data, then we use that to calculate something called the Euler chracterstic and "calculate the threshold at which we would
 expect 5% of equivalent statistical maps arising under the null hypothesis to contain at least one area above the threshold"
 
@@ -112,6 +112,21 @@ smoothed_img = spn.filters.gaussian_filter(thresh_masked, sd, mode='wrap')
 resels= thresh_masked.shape[1]/8
 print(resels)
 
+##Now we have to estimate the Euler charateristic from the amount of "resels" in our masked image
 
+# expected Euler Characteristic based on Z score values
+Z = np.linspace(0, 5, 1000)
 
+#Using some wild formula from Worsley and colleagues
+def expected_ec_2d(z, resel_count):
+    z = np.asarray(z)
+    return (resel_count * (4 * np.log(2)) * ((2*np.pi)**(-3./2)) * z) * np.exp((z ** 2)*(-0.5))
+
+#plot what the expected Euler Characteristic based on our number of resels
+expEC = expected_ec_2d(Z, resels)
+plt.plot(Z, expEC)
+[...]
+plt.xlabel('Z score threshold')
+plt.ylabel('Expected EC for thresholded image')
+plt.title('Expected EC for smoothed image with %s resels' % resels)
 
