@@ -59,10 +59,6 @@ print(bonferroni_thresh (.05, 515))
 ## As we can see, a p-value of .000097... is not reasonable to maintain significance, 
 ##implying that this test is much too strict to correct for multiple comparisons using neuroimaging data
 
-#plot to demonstrate bonferonni 
-
-
-
 ##Family Wise Error Rate
 #Is each test independent? Likely not, as there is some degree of spatial correlation
 #Calculate FWER
