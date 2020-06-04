@@ -59,7 +59,6 @@ print(bonferroni_thresh (.05, 515))
 ## As we can see, a p-value of .000097... is not reasonable to maintain significance, 
 ##implying that this test is much too strict to correct for multiple comparisons using neuroimaging data
 
-
 ##False Discovery Rate
 ## FDR controls for the number of false positives as a proportion of the number of all tests declared significant.
 ## This is instead of controlling for the risk of any false positives
