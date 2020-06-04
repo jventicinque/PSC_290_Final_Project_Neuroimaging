@@ -93,3 +93,13 @@ alpha =.05
 plt.plot(i, alpha * i / n, 'r', label='$q i / N$')
 
 ##It looks like only a very small number of tests near the beginning of the distribution fall under this threshold
+##The goal of FDR is to find the blue dot with the largest value that falls under the red line, but it's hard to tell with the current figure
+
+##Let's zoom in a little bit to the left side of the distribution
+#Plot only the first 40 points
+plt.plot(i[:40], p_values[:40], '.')
+[...]
+plt.ylabel('p value')
+plt.axhline(y =.07, color= 'r')
+
+##it looks like the maximum value is around 37 tests that fall below the .05 threshold
