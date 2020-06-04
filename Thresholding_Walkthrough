@@ -1,58 +1,51 @@
-#Thresholding Walkthrough
+##Thresholding Walkthrough
 
 #Load in Packages
 from nilearn import plotting
 import pylab as plt
 %matplotlib inline
-
 import numpy as np
-import nilabel as nb
 from nilearn import image
 import nibabel as nib
+from nilearn.input_data import NiftiMasker
 
 #Load in data
 unthresh_data = nib.load('zstat4.nii.gz')
 print(unthresh_data)
 
-#Let's visualize the data first and then we will run some different thresholding techniques on it
+##Let's visualize the data first and then we will run some different thresholding techniques on it
 #plot data
-
 plotting.plot_roi(unthresh_data,
                  cmap='Paired', title='Unthreshholded Data', draw_cross=False)
 
 
-#First, we need to make a mask of the whole brain and determine the number of voxels in data (this will be count as the "number of tests" that are being run).
+##First, we need to make a mask of the whole brain and determine the number of voxels in data (this will be count as the "number of tests" that are being run).
 
 #Make a mask of only voxels in the brain
-
 from nilearn.masking import compute_epi_mask
 mask_img = compute_epi_mask(unthresh_data)
 
 #load in a mask of the mPFC
 mask_file = 'mPFC_Bilateral_-8_54_24.nii'
 
-# visualize mask on thresholded data and MNI template
-
-plotting.plot_roi(mask_file, bg_img= unthresh_data,
-                 cmap='Paired', title='ROI of mPFC', draw_cross=False)
-
+#Visualize mask on thresholded data and MNI template
 plotting.plot_roi(mask_file, bg_img= unthresh_data,
                  cmap='Paired', title='ROI of mPFC', draw_cross=False)
 
 # create the mask to use and standardize
 masker = NiftiMasker(mask_img=mask_file, standardize=True)
-
 # fit the mask
 thresh_masked = masker.fit_transform(unthresh_data)
 
 #Determine the shape of the mask to see how many "independent tests" are being run
-
 thresh_masked.shape
 
+##This tells us that 515 voxels are in the current mask, so we use this as if we have 515 "independent tests"
+#Assign the number of voxels in the mask to "n"
 n = thresh_masked.shape[1]
 print(n)
 
-#Bonferonni Correction
+##Bonferonni Correction
 #Is this test too conservative for neuroimaging data?
 #bonferonni = alpha/ number of voxels 
 
