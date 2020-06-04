@@ -10,6 +10,7 @@ import nibabel as nib
 from nilearn.input_data import NiftiMasker
 from __future__ import print_function, division
 import scipy.stats as sst
+import scipy.ndimage as spn
 
 #Load in data
 unthresh_data = nib.load('zstat4.nii.gz')
@@ -92,12 +93,25 @@ plt.plot(i[:40], p_values[:40], '.')
 [...]
 plt.ylabel('p value')
 plt.axhline(y =.07, color= 'r')
+##It looks like the maximum value is around 37 tests that fall below the .05 threshold
 
-##it looks like the maximum value is around 37 tests that fall below the .05 threshold
+##Random Field Theory
+##Let's stretch a little further and try a more complicated thresholding technique. It seems kind of complicated, but it seems to be based on the spatial autocorrelation of the data.
+##First we estimate or manipulate the smoothness of the data, then we use that to calculate something called the Euler chracterstic and "calculate the threshold at which we would
+expect 5% of equivalent statistical maps arising under the null hypothesis to contain at least one area above the threshold"
 
-##Family Wise Error Rate
-#Is each test independent? Likely not, as there is some degree of spatial correlation
-#Calculate FWER
-#plot FWER
+#Smooth the thresholded mask with a Gaussian kernel of 8mm
+smoothing_kernel = 8
+sd = smoothing_kernel / np.sqrt(8.*np.log(2)) 
+smoothed_img = spn.filters.gaussian_filter(thresh_masked, sd, mode='wrap')
+
+#Calcuate how many "resels"(i.e. resolution element) there are.
+#Resels are defined as a "block of pixels of the same size as the FWHM of the smoothness of the image."
+
+#In this case, resels = number of voxels/ the smoothing kernel which we set as 8
+resels= thresh_masked.shape[1]/8
+print(resels)
+
+
 
 
