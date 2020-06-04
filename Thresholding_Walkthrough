@@ -8,6 +8,8 @@ import numpy as np
 from nilearn import image
 import nibabel as nib
 from nilearn.input_data import NiftiMasker
+from __future__ import print_function, division
+import scipy.stats as sst
 
 #Load in data
 unthresh_data = nib.load('zstat4.nii.gz')
@@ -43,37 +45,51 @@ thresh_masked.shape
 #Assign the number of voxels in the mask to "n"
 n = thresh_masked.shape[1]
 print(n)
+#Assign an alpha level of .05
+alpha = .05
 
 ##Bonferonni Correction
 #Is this test too conservative for neuroimaging data?
 #bonferonni = alpha/ number of voxels 
 
-def bonferroni_thresh(alpha = .05, n):
-  return alpha / n
+def bonferroni_thresh(alpha, n):
+    return alpha / n
+print(bonferroni_thresh (.05, 515))
 
-print(bonferroni_thresh(.05, n))
+## As we can see, a p-value of .000097... is not reasonable to maintain significance, 
+##implying that this test is much too strict to correct for multiple comparisons using neuroimaging data
 
 #plot to demonstrate bonferonni 
-##example from online- grid width needs to be number of voxels.
-grid_width = 100
-threshold = 0.05/(grid_width**2)
-simulation = SimulateGrid(grid_width=grid_width, n_subjects=20)
-simulation.plot_grid_simulation(threshold=threshold, threshold_type='p', n_simulations=100)
 
 
-#Family Wise Error Rate
+
+##Family Wise Error Rate
 #Is each test independent? Likely not, as there is some degree of spatial correlation
-
 #Calculate FWER
-
 #plot FWER
 
-#False Discovery Rate
-#The FDR is the expected proportion of false positives among significant tests.
+##False Discovery Rate
+## FDR controls for the number of false positives as a proportion of the number of all tests declared significant.
+## This is instead of controlling for the risk of any false positives
 
-import scipy.stats as sst
-normal_distribution = sst.norm(loc=0,scale=1.) #loc is the mean, scale is the variance.
-# The normal CDF
+#Assuming we have 515 "tests" as determined from our earlier steps, let's creat a distribution of scores derived from 515 tests
+n = 515
+z_values = np.random.normal(size=n)
+
+#Turn z scores into p-values
+normal_distribution = sst.norm(loc=0,scale=1.)
 p_values = normal_distribution.cdf(z_values)
 
-#plot FDR
+#Sort the p values from smallest to largest
+p_values = np.sort(p_values)
+i = np.arange(1, n+1)
+
+#Plot a figure that shows a distribution of the number of false positives likely with 515 tests
+plt.plot(i, p_values, '.')
+[...]
+plt.ylabel('p value')
+#Put a red line at p = .05 to show the threshold of how many tests fall below that
+alpha =.05
+plt.plot(i, alpha * i / n, 'r', label='$q i / N$')
+
+##It looks like only a very small number of tests near the beginning of the distribution fall under this threshold
