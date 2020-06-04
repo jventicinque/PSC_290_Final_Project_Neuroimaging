@@ -18,7 +18,6 @@ print(unthresh_data)
 plotting.plot_roi(unthresh_data,
                  cmap='Paired', title='Unthreshholded Data', draw_cross=False)
 
-
 ##First, we need to make a mask of the whole brain and determine the number of voxels in data (this will be count as the "number of tests" that are being run).
 
 #Make a mask of only voxels in the brain
