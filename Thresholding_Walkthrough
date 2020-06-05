@@ -13,6 +13,7 @@ import scipy.stats as sst
 from scipy.ndimage import gaussian_filter
 import scipy.ndimage as spn
 
+##Describe where the data comes from 
 #Load in data
 unthresh_data = nib.load('zstat4.nii.gz')
 print(unthresh_data)
