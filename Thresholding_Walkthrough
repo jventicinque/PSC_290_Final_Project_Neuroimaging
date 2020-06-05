@@ -130,3 +130,9 @@ plt.xlabel('Z score threshold')
 plt.ylabel('Expected EC for thresholded image')
 plt.title('Expected EC for smoothed image with %s resels' % resels)
 
+#We can use this plot to predict different euler characteristics based on z values, given our number of resels in our image
+#For example, at Z =1, the predicted EC = 6.87
+expected_ec_2d([1.0], resels)
+
+##In some complicated way, these predicted EC values can be used to give the correct threshold for the required control of false positives
+
