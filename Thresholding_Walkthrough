@@ -5,11 +5,13 @@ from __future__ import print_function, division
 from nilearn import plotting
 import pylab as plt
 %matplotlib inline
+import matplotlib.pyplot as plt
 import numpy as np
 from nilearn import image
 import nibabel as nib
 from nilearn.input_data import NiftiMasker
 import scipy.stats as sst
+from scipy.ndimage import gaussian_filter
 import scipy.ndimage as spn
 
 #Load in data
