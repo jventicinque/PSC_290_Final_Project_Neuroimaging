@@ -112,7 +112,7 @@ ren.rm(response_actor)
 from dipy.reconst.csdeconv import ConstrainedSphericalDeconvModel
 csd_model = ConstrainedSphericalDeconvModel(gtab, response)
 
-data_small = data[20:50, 55:85, 38:39]
+data_small = data[90:106, 65:80, 22:23]
 csd_fit = csd_model.fit(data_small)
 
 csd_odf = csd_fit.odf(default_sphere)
