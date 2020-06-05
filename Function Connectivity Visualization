@@ -1,0 +1,12 @@
+Fetch data (using Haxby dataset)
+Extract time series, functional networks with dictionary learning
+Build and display correlation matrix
+Display corresponding graph
+3D visualization
+Use of parameters such as `display_mode` and `cut_coords` with plotting function: func:`nilearn.plotting.plot_stat_map`
+Show how to use various features such as `add_edges`, `add_contours`, `add_markers` in visualizing regions of interest images
+Mask images overlaying on subject specific anatomical/EPI image
+Show how to visualize the retrieved dataset using plotting tools from nilearn
+Demonstrate various display features using nilearn where each specific feature will be helpful in projecting brain imaging results for further interpretation
+Import nilearn image processing tool for basic processing of functional brain image
+Compute voxel-wise mean functional image across time dimension
