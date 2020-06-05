@@ -13,7 +13,7 @@ import scipy.stats as sst
 from scipy.ndimage import gaussian_filter
 import scipy.ndimage as spn
 
-##Describe where the data comes from 
+##Data for this walkthough was obtained from NeuroVault and is unthresholded data of 20 participants with Austim Spectrum Disorder
 #Load in data
 unthresh_data = nib.load('zstat4.nii.gz')
 print(unthresh_data)
