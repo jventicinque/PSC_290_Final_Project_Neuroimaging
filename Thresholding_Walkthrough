@@ -1,6 +1,7 @@
 ##Thresholding Walkthrough
 
 #Load in Packages
+from __future__ import print_function, division
 from nilearn import plotting
 import pylab as plt
 %matplotlib inline
@@ -8,7 +9,6 @@ import numpy as np
 from nilearn import image
 import nibabel as nib
 from nilearn.input_data import NiftiMasker
-from __future__ import print_function, division
 import scipy.stats as sst
 import scipy.ndimage as spn
 
