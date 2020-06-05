@@ -3,7 +3,6 @@
 #Load in Packages
 from __future__ import print_function, division
 from nilearn import plotting
-import pylab as plt
 %matplotlib inline
 import matplotlib.pyplot as plt
 import numpy as np
