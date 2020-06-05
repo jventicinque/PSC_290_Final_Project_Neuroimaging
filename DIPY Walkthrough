@@ -90,3 +90,66 @@ response = recursive_response(gtab, data, mask=wm_mask, sh_order=8,
                               peak_thr=0.01, init_fa=0.08,
                               init_trace=0.0021, iter=8, convergence=0.001,
                               parallel=True)
+
+response_signal = response.on_sphere(default_sphere)
+# transform our data from 1D to 4D
+response_signal = response_signal[None, None, None, :]
+response_actor = actor.odf_slicer(response_signal, sphere=default_sphere,
+                                  colormap='plasma')
+
+ren = window.Renderer()
+
+ren.add(response_actor)
+print('Saving illustration as csd_recursive_response.png')
+window.record(ren, out_path='csd_recursive_response.png', size=(200, 200))
+if interactive:
+    window.show(ren)
+    
+ren.rm(response_actor)
+
+## Step 2. fODF reconstruction
+
+from dipy.reconst.csdeconv import ConstrainedSphericalDeconvModel
+csd_model = ConstrainedSphericalDeconvModel(gtab, response)
+
+data_small = data[20:50, 55:85, 38:39]
+csd_fit = csd_model.fit(data_small)
+
+csd_odf = csd_fit.odf(default_sphere)
+
+fodf_spheres = actor.odf_slicer(csd_odf, sphere=default_sphere, scale=0.9,
+                                norm=False, colormap='plasma')
+
+ren.add(fodf_spheres)
+
+print('Saving illustration as csd_odfs.png')
+window.record(ren, out_path='csd_odfs.png', size=(600, 600))
+if interactive:
+    window.show(ren)
+    
+from dipy.direction import peaks_from_model
+
+csd_peaks = peaks_from_model(model=csd_model,
+                             data=data_small,
+                             sphere=default_sphere,
+                             relative_peak_threshold=.5,
+                             min_separation_angle=25,
+                             parallel=True)
+
+window.clear(ren)
+fodf_peaks = actor.peak_slicer(csd_peaks.peak_dirs, csd_peaks.peak_values)
+ren.add(fodf_peaks)
+
+print('Saving illustration as csd_peaks.png')
+window.record(ren, out_path='csd_peaks.png', size=(600, 600))
+if interactive:
+    window.show(ren)
+    
+fodf_spheres.GetProperty().SetOpacity(0.4)
+
+ren.add(fodf_spheres)
+
+print('Saving illustration as csd_both.png')
+window.record(ren, out_path='csd_both.png', size=(600, 600))
+if interactive:
+    window.show(ren)
