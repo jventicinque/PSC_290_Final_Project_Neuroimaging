@@ -1,4 +1,20 @@
-Fetch data (using Haxby dataset)
+#Load Packages
+from nilearn import datasets
+from nilearn import input_data
+from nilearn import plotting
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+
+#load in the haxby dataset from Nilearn
+#This is a block-design fMRI dataset of 6 subjects with 12 runs per subject in which they viewed a series of objects and faces.
+
+haxby_dataset = datasets.fetch_haxby()
+
+#Check the data. Making sure that a bunch of Nifti files loaded in
+print(type(haxby_dataset))
+print(haxby_dataset)
+
 Extract time series, functional networks with dictionary learning
 Build and display correlation matrix
 Display corresponding graph
