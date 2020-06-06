@@ -16,7 +16,15 @@ print(type(haxby_dataset))
 print(haxby_dataset)
 
 Extract time series, functional networks with dictionary learning
-Build and display correlation matrix
+
+##Build and display correlation matrix
+#Build the correlation matrix from the time series data
+from nilearn.connectome import ConnectivityMeasure
+correlation_measure = ConnectivityMeasure(kind='correlation')
+correlation_matrix = correlation_measure.fit_transform([time_series])[0]
+
+#Plot the correlation matrix
+
 Display corresponding graph
 3D visualization
 Use of parameters such as `display_mode` and `cut_coords` with plotting function: func:`nilearn.plotting.plot_stat_map`
