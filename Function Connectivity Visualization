@@ -17,7 +17,28 @@ haxby_dataset = datasets.fetch_haxby()
 print(type(haxby_dataset))
 print(haxby_dataset)
 
-Extract time series, functional networks with dictionary learning
+#Download Harvard Oxford atlas packaged from FSL 5.0 & name atlas to load
+#Retrieve the Harvard-Oxford cortical parcellation, sampled at 2mm, and with a threshold of a probability of 0.25
+atlas_dataset = datasets.fetch_atlas_harvard_oxford('cort-maxprob-thr25-2mm')
+atlas_filename = atlas_dataset.maps
+labels = atlas_dataset.labels
+
+print('Atlas ROIs are located at: %s' % atlas_filename)
+
+#Visualization of the Harvard-Oxford atlas
+plotting.plot_roi(atlas_filename)
+
+# Extract signals on the parcellation
+from nilearn.input_data import NiftiLabelsMasker
+masker = NiftiLabelsMasker(labels_img=atlas_filename, standardize=True)
+
+# Compute the mean EPI and extract timeseries data from masked points
+from nilearn.image.image import mean_img
+func_filename = haxby_dataset.func[0]
+
+# Compute voxel-wise mean functional image across time dimension
+mean_func = mean_img(func_filename)
+time_series = masker.fit_transform(func_filename)
 
 ##Build and display correlation matrix
 #Construct the correlation matrix from the time series data
