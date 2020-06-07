@@ -7,8 +7,6 @@ from dipy.core.gradients import gradient_table
 from dipy.data import get_fnames, default_sphere, get_sphere, fetch_cenir_multib, read_cenir_multib
 from dipy.reconst.csdeconv import auto_response
 from dipy.reconst.forecast import ForecastModel
-from dipy.viz import window, actor
-from dipy.sims.voxel import single_tensor_odf
 import dipy.reconst.dti as dti
 import numpy as np
 import matplotlib.pyplot as plt
@@ -45,6 +43,10 @@ print(response)
 
 print(ratio)
 
+# Sanity check: The y (caudal-rostral) and z (superior-inferior axis) eigenvalues (radial diffusivity values) should be equal.  
+# and the ratio between the x eigenvalue (axial diffusivity value) and the y or z eigenvalue should be roughly 0.2
+# (axial diffusivity should be 5 times that of radial diffusivity in the corpus collosum) 
+
 # window contains all the objects that connect what needs to be rendered to the display 
 # actor module contains all the different primitives e.g., streamtubes, lines, image slices, etc.
 from dipy.viz import window, actor
@@ -53,10 +55,10 @@ from dipy.sims.voxel import single_tensor_odf
 # Enables/disables interactive visualization
 interactive = False
 
-# Ren = helps render the image and show the image
-# The Renderer class holds and provides access to all the actors
+# Scene = helps render the image and show the image
+# The Scene class holds and provides access to all the actors
 # Create eigenvalues and eigenvectors for image
-ren = window.Renderer()
+ren = window.Scene()
 evals = response[0]
 evecs = np.array([[0, 1, 0], [0, 0, 1], [1, 0, 0]]).T
 
