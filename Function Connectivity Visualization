@@ -55,7 +55,18 @@ np.fill_diagonal(correlation_matrix, 0)
 plotting.plot_matrix(correlation_matrix, figure=(10, 8), labels=labels[1:],
                      vmax=0.8, vmin=-0.8, reorder=True)
 
-Display corresponding graph
+#I'm not entirely sure about these next steps...but posting here in case anyone wants to try and work through it
+msdl_atlas_region_coords = plotting.find_probabilistic_atlas_cut_coords(msdl_atlas_filename)
+
+coords = msdl_atlas.region_coords
+
+#We threshold to keep only the 20% of edges with the highest value because the graph is very dense
+plotting.plot_connectome(correlation_matrix, coords,
+                         edge_threshold="80%", colorbar=True)
+
+plotting.show()
+
+
 3D visualization
 Use of parameters such as `display_mode` and `cut_coords` with plotting function: func:`nilearn.plotting.plot_stat_map`
 Show how to use various features such as `add_edges`, `add_contours`, `add_markers` in visualizing regions of interest images
