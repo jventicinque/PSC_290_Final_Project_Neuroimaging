@@ -19,9 +19,9 @@ print(haxby_dataset)
 
 #Download Harvard Oxford atlas packaged from FSL 5.0 & name atlas to load
 #Retrieve the Harvard-Oxford cortical parcellation, sampled at 2mm, and with a threshold of a probability of 0.25
-atlas_dataset = datasets.fetch_atlas_harvard_oxford('cort-maxprob-thr25-2mm')
-atlas_filename = atlas_dataset.maps
-labels = atlas_dataset.labels
+atlas = datasets.fetch_atlas_harvard_oxford('cort-maxprob-thr25-2mm')
+atlas_filename = atlas.maps
+labels = atlas.labels
 
 print('Atlas ROIs are located at: %s' % atlas_filename)
 
