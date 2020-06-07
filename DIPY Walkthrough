@@ -27,7 +27,10 @@ bvals, bvecs = read_bvals_bvecs(bval_fname, bvec_fname)
 
 # Reconstruction method # 1: Constrained Spherical Deconvolution
 
-# Automatic estimation of response function using Fractional Anisotropy (FA)
+# Strategy 1:
+
+Step 1: Automatic estimation of fiber response function using Fractional Anisotropy (FA)
+
 # FA measures the extent to which diffusion occurs anisotropically vs isotropically with a given region (e.g. voxel)
 # FA values closer to 0 indicate more isotropic diffusion
 # FA values closer to 1 indicate more anisotropic diffusion
@@ -43,12 +46,12 @@ print(response)
 
 print(ratio)
 
-# Sanity check: The y (caudal-rostral) and z (superior-inferior axis) eigenvalues (radial diffusivity values) should be equal.  
-# and the ratio between the x eigenvalue (axial diffusivity value) and the y or z eigenvalue should be roughly 0.2
-# (axial diffusivity should be 5 times that of radial diffusivity in the corpus collosum) 
+# Sanity check: The y (caudal-rostral axis) and z (superior-inferior axis) eigenvalues (radial diffusivity values) should be equal.  
+# and the ratio between the x (left-right axis) eigenvalue (axial diffusivity value) and the y or z eigenvalue should be roughly 0.2
+# (i.e. axial diffusivity should be 5 times that of radial diffusivity in the corpus collosum) 
 
-# window contains all the objects that connect what needs to be rendered to the display 
-# actor module contains all the different primitives e.g., streamtubes, lines, image slices, etc.
+# the 'window' module contains all the objects that connect what needs to be rendered to the display 
+# the 'actor' module contains all the different primitives e.g., streamtubes, lines, image slices, etc.
 from dipy.viz import window, actor
 from dipy.sims.voxel import single_tensor_odf
 
@@ -62,22 +65,20 @@ ren = window.Scene()
 evals = response[0]
 evecs = np.array([[0, 1, 0], [0, 0, 1], [1, 0, 0]]).T
 
-# Simulate ODF with a single tensor
-# ODF = Orientation Distribution Functions
+# Step 2: Simulate fiber orientation distrubution function (fODF) with a single tensor
 response_odf = single_tensor_odf(default_sphere.vertices, evals, evecs)
 # transform our data from 1D to 4D
 response_odf = response_odf[None, None, None, :]
 # Slice 4D spherical fields in native or world coordinates
 response_actor = actor.odf_slicer(response_odf, sphere=default_sphere,
                                   colormap='plasma')
-#
+
+# Visualize single tensor as a visual check
 ren.add(response_actor)
 print('Saving illustration as csd_response.png')
 window.record(ren, out_path='csd_response.png', size=(200, 200))
 if interactive:
     window.show(ren) # The show function displays what is in the renderer on a window 
-
-#
 ren.rm(response_actor)
 
 # Recursive calibration of response function using peak threshold
