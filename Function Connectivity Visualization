@@ -40,6 +40,9 @@ func_filename = haxby_dataset.func[0]
 mean_func = mean_img(func_filename)
 time_series = masker.fit_transform(func_filename)
 
+#Check time-series 2D matrix (number of time points x number of regions)
+print(time_series.shape)
+
 ##Build and display correlation matrix
 #Construct the correlation matrix from the time series data
 correlation_measure = ConnectivityMeasure(kind='correlation')
