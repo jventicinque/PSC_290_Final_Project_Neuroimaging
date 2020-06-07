@@ -1,15 +1,20 @@
 # K-fold cross-validation for model comparison
 
+# import necessary packages
 from dipy.io.image import load_nifti, save_nifti
 from dipy.io.gradients import read_bvals_bvecs
 from dipy.core.gradients import gradient_table
-from dipy.data import get_fnames, default_sphere
+from dipy.data import get_fnames, default_sphere, get_sphere, fetch_cenir_multib, read_cenir_multib
 from dipy.reconst.csdeconv import auto_response
+from dipy.reconst.forecast import ForecastModel
+from dipy.viz import window, actor
+from dipy.sims.voxel import single_tensor_odf
 import dipy.reconst.dti as dti
 import numpy as np
+import matplotlib.pyplot as plt
 
 # Load in data files
-file = 'dti_005_dwi_HF_1shell_b1200_eddy.nii.gz'
+file = 'dti_005_dwi_FH_1shell_b1200_eddy.nii.gz'
 bvec_fname = 'dti_bvec_su_costin.txt'
 bval_fname = 'dti_bval_su_costin.txt'
 
@@ -22,9 +27,18 @@ gtab = gradient_table(bval_fname, bvec_fname)
 # Load bvals, bvecs from .txt files
 bvals, bvecs = read_bvals_bvecs(bval_fname, bvec_fname)
 
+# Reconstruction method # 1: Constrained Spherical Deconvolution
+
 # Automatic estimation of response function using Fractional Anisotropy (FA)
-# FA is defined as the normalized variance of the eigen-values of the tensor
-from dipy.reconst.csdeconv import auto_response
+# FA measures the extent to which diffusion occurs anisotropically vs isotropically with a given region (e.g. voxel)
+# FA values closer to 0 indicate more isotropic diffusion
+# FA values closer to 1 indicate more anisotropic diffusion
+
+# Estimate the fiber response function in an ROI where we know what FA values we should see
+# Here, this is a spherical ROI with a radius of 10 voxels in the middle of the brain, and, specifically...
+# the the voxels within this sphere where FA is greater than 0.7.
+# (i.e. the corpus collosum, centered on [0,0,0], where diffusion is fairly anisotropic as fibers pass from one hemisphere to the other)
+
 response, ratio = auto_response(gtab, data, roi_radius=10, fa_thr=0.7)
 
 print(response)
